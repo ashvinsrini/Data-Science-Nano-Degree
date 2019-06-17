@@ -21,6 +21,4 @@ And neighbourhoods like Capitol Hill, Arbor heights have some of the best review
 
 
 Acknowledgements: 
-I'd like to thank stackoverflow, medium for providing a platform through which I could learn. And also the Kaggle for providing me with the required dataset of AirBNB Seattle data set
-
-
+I'd like to thank stackoverflow, medium for providing a platform through which I could learn. And also the Kaggle for providing me with the required dataset of AirBNB Seattle data set, which you can browse [here](https://www.kaggle.com/airbnb/seattle)
