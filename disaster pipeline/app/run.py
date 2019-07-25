@@ -6,7 +6,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk import pos_tag, word_tokenize
 import nltk
-
+nltk.download('averaged_perceptron_tagger')
 from sklearn.base import BaseEstimator, TransformerMixin
 
 from flask import Flask
@@ -36,6 +36,14 @@ class StartingVerbExtractor(BaseEstimator, TransformerMixin):
     
     
 def tokenize(text):
+    '''
+    Description: This function tokenizes the inputed text
+    Args:
+        text: raw text
+        
+    Returns: 
+        clean_tokens: cleaned tokens obtained from the raw text
+    '''
     tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
 
@@ -64,6 +72,9 @@ def index():
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
     
+    category_names = df.iloc[:,4:].columns
+    category_counts = (df.iloc[:,4:] != 0).sum().values
+    
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
     graphs = [
@@ -82,6 +93,26 @@ def index():
                 },
                 'xaxis': {
                     'title': "Genre"
+                }
+            }
+        },
+                    # GRAPH 2 - category graph    
+        {
+            'data': [
+                Bar(
+                    x=category_names,
+                    y=category_counts
+                )
+            ],
+
+            'layout': {
+                'title': 'Histogram of message labels',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Category",
+                    'tickangle': 35
                 }
             }
         }

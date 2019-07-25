@@ -40,6 +40,16 @@ class StartingVerbExtractor(BaseEstimator, TransformerMixin):
 
 
 def load_data(database_filepath):
+    '''
+    Description: This function loads the file from the saved database
+    Args:   
+        database_filepath: path for database input
+        
+    Returns: 
+        X: inputs
+        y: target
+        catNames: unique labels
+    '''
     engine = create_engine(database_filepath)
     df = pd.read_sql_table('DisasterResponse', engine)
     X = df['message']
@@ -49,6 +59,14 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    '''
+    Description: This function tokenizes the inputed text
+    Args:
+        text: raw text
+        
+    Returns: 
+        clean_tokens: cleaned tokens obtained from the raw text
+    '''
     url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
     detected_urls = re.findall(url_regex, text)
     for url in detected_urls:
@@ -66,6 +84,13 @@ def tokenize(text):
 
 
 def build_model():
+    '''
+    Description: This function defines the pipeline for building the model and also uses random forest to train 
+    Args: None
+       
+    Returns: 
+        an object that conatins all the model details
+    '''
     pipeline = Pipeline([
         ('features', FeatureUnion([
             
@@ -94,6 +119,16 @@ def build_model():
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    '''
+    Description: This function evaluates the accuracy, f1 scores
+    Args:
+        model: fitted model on training data
+        X_test: input test attributes
+        Y_test: ground values of target
+        category_names: uniqule labels
+    Returns: 
+        None but prints the evaluation metrics
+    '''
     y_pred = model.predict(X_test)
     for i,col in enumerate(category_names):
         print(classification_report(Y_test[col].values, y_pred[:,i]))
@@ -101,11 +136,23 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 
 def save_model(model, model_filepath):
+    '''
+    Description: This function saves the model into the provided destination
+    Args:
+        model: fitted model
+        model_filepath: Destination filepath
+    Returns: 
+        None but saves the file 
+    '''
     joblib.dump(model, model_filepath) 
     pass
 
 
 def main():
+    '''
+    Description: This function is the main function that calls the other functions and computes all the stages in the pipeline
+
+    '''
     if len(sys.argv) == 3:
         database_filepath, model_filepath = sys.argv[1:]
         #pdb.set_trace()

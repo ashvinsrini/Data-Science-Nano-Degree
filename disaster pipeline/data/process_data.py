@@ -4,6 +4,12 @@ import numpy as np
 from sqlalchemy import create_engine
 
 def load_data(messages_filepath, categories_filepath):
+    '''
+    Description: This function reads the dataframes from two different filepaths and returns back a merged version of dataframe.
+    args: message_filepath, categories_filepath filepaths for message.csv and category.csv
+    returns: merged dataframe of messages and categories, inner join of 
+    
+    '''
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df = pd.merge(messages, categories, left_on = 'id', right_on = 'id', how = 'inner')
@@ -11,6 +17,12 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    '''
+    Description: This function cleans the dataframe and returns the cleaned data frame
+    Args: merged dataframe from the load data function
+    Returns: cleaned dataframe
+    
+    '''
     categories = df['categories'].str.split(';', expand = True)
     names = categories.loc[0,]
     names = pd.Series([name[:-2] for name in names])
@@ -30,6 +42,14 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
+    '''
+    Description: This function saves the cleaned dataframe into the provided destination
+    Args:
+        df: cleaned dataframe
+        database_filename: Destination filepath
+    Returns: 
+        None but saves the file 
+    '''
     database_filename = 'sqlite:///' + database_filename
     engine = create_engine(database_filename)
     df.to_sql('DisasterResponse', engine, index=False)
@@ -37,6 +57,11 @@ def save_data(df, database_filename):
 
 
 def main():
+    '''
+    Description: This function is the main function that calls the other functions and computes all the stages in the pipeline
+
+    '''
+    
     if len(sys.argv) == 4:
 
         messages_filepath, categories_filepath, database_filepath = sys.argv[1:]
