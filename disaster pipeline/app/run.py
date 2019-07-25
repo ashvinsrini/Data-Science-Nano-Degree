@@ -106,7 +106,7 @@ def index():
             ],
 
             'layout': {
-                'title': 'Histogram of message labels',
+                'title': 'Frequency distribution of message categories',
                 'yaxis': {
                     'title': "Count"
                 },
